@@ -4,6 +4,7 @@ from math import *
 from ConfigRobot import *
 from GlobalFunc import *
 
+
 class Kinematics(object):
 	"""docstring for Kinematics"""
 	def __init__(self):
@@ -13,6 +14,7 @@ class Kinematics(object):
 		self.a = self.cf.a
 		self.a[4] = self.a[4]
 		self.alpha = self.cf.alpha
+	# 第1和第2个关节的变换矩阵，以下类推
 
 	def Cal_AMatrix(self, q1, q2, q3, q4):
 		A10 = DHMatrix(q1, self.d[1], self.a[1], self.alpha[1])
@@ -20,8 +22,10 @@ class Kinematics(object):
 		A32 = DHMatrix(q3, self.d[3], self.a[3], self.alpha[3])
 		A43 = DHMatrix(q4, self.d[4], self.a[4]+33, self.alpha[4])
 		A40 = A10.dot(A21).dot(A32).dot(A43)
+		#返回的是末端基于基坐标系的变换矩阵
+		return A40
 
-		return A40	
+
 class FwdKinematics(Kinematics):
 	"""docstring for FwdKinematics"""
 	def __init__(self):
@@ -38,8 +42,11 @@ class FwdKinematics(Kinematics):
 		zE = AE[2][3]
 		psi, theta, phi = ConvertMatToRPY(AE[0:3, 0:3])
 		EVars = [xE, yE, zE, psi, theta, phi]
+		#返回pose，前三个是位移信息，后三个是轴角
 		return np.asarray(EVars)
 
+
+#逆解
 class InvKinematics(Kinematics):
 	"""docstring for InvKinematics"""
 	def __init__(self):

@@ -21,6 +21,7 @@ class RobotSimulator(QMainWindow):
 		super(RobotSimulator, self).__init__(*args)
 
 		loadUi('main.ui', self)
+
 		self.timer  = QTimer()
 		self.count = 0
 		self.timer.timeout.connect(self.timeEvent)
@@ -29,7 +30,7 @@ class RobotSimulator(QMainWindow):
 		# self.objRB.cf = ConfigRobot()
 		self.UpdateData(1)
 		self.UpdateData(2)
-		self.fileName = None
+		self.fileName = "./GCode/北京航空航天大学.gcode"  # 将传入的文件名赋值给fileName变量
 		self.AllPoints = np.array([[None, None, None]])
 		self.AllJVars = np.array([[None, None, None, None]])
 		self.toolstatus = np.array([None])
@@ -107,20 +108,9 @@ class RobotSimulator(QMainWindow):
 		# self.btnClear.clicked.connect(self.Clear)
 		# self.actionDock_Control_Panel.addAction(self.ViewGrid)
 		self.actionDock_Control_Panel.triggered.connect(self.ViewGrid)
-		self.actionAbout.triggered.connect(self.ShowAbout)
 		self.btnUpdateStatusTab1.clicked.connect(lambda: self.UpdateData(1))
 		self.btnUpdateStatusTab2.clicked.connect(lambda: self.UpdateData(2))
 
-	def ShowAbout(self):
-		msg = QMessageBox()
-		msg.setIcon(QMessageBox.Information)
-		msg.setText("Robot Simulator")
-		msg.setInformativeText("Project: Robot design\
-			\n\nCode by: Nguyen Van Khuong\
-			\nSource code: https://github.com/khuonghust/RobotSimulator\
-			\nVideo demo: https://tinyurl.com/robot-simulation-python-opengl")
-		msg.setWindowTitle("About Dialog")
-		msg.exec_()
 
 	def Stop(self):
 		self.isRun = False
@@ -147,7 +137,7 @@ class RobotSimulator(QMainWindow):
 		self.UpdateData(2)
 		self.RB.updateGL()
 
-	def openFileNameDialog(self):    
+	def openFileNameDialog(self):
 		options = QFileDialog.Options()
 		options |= QFileDialog.DontUseNativeDialog
 		self.fileName, _ = QFileDialog.getOpenFileName(self,"Openfile", "","Gcode Files (*.gcode);;All Files (*)", options=options)
